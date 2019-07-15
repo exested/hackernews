@@ -2,25 +2,25 @@ from django.http import JsonResponse
 from django.views.generic import View
 from .models import Entry
 
-DEFAULT_LIMIT = 5
-DEFAULT_OFFSET = 0
-DEFAULT_ORDER = 'id'
-
 
 class EntryList(View):
+    DEFAULT_LIMIT = 5
+    DEFAULT_OFFSET = 0
+    DEFAULT_ORDER = 'id'
+
     def get_limit(self):
         try:
-            return int(self.request.GET.get('limit', DEFAULT_LIMIT))
+            return int(self.request.GET.get('limit', self.DEFAULT_LIMIT))
         except ValueError:
             pass
-        return DEFAULT_LIMIT
+        return self.DEFAULT_LIMIT
 
     def get_offset(self):
         try:
-            return int(self.request.GET.get('offset', DEFAULT_OFFSET))
+            return int(self.request.GET.get('offset', self.DEFAULT_OFFSET))
         except ValueError:
             pass
-        return DEFAULT_OFFSET
+        return self.DEFAULT_OFFSET
 
     def get_order(self):
         order = self.request.GET.get('order')
@@ -35,7 +35,7 @@ class EntryList(View):
                 self.order = asc_desc+order
             return self.order
 
-        return DEFAULT_ORDER
+        return self.DEFAULT_ORDER
 
     def queryset(self):
         limit = self.get_limit()
@@ -56,9 +56,9 @@ class EntryList(View):
         }
 
     def get(self, request):
-        entries_dict = [self.entry_serialise(entry) for entry in self.queryset()]
+        entry_list = [self.entry_serialise(entry) for entry in self.queryset()]
         response = JsonResponse({
-            'entry_list': entries_dict,
+            'entry_list': entry_list,
             'total_count': self.get_total_count(),
         })
         return response

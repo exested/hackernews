@@ -1,11 +1,12 @@
 import urllib.request
 from bs4 import BeautifulSoup
 from datetime import datetime
+from typing import List
 
 HACKER_NEWS = 'https://news.ycombinator.com/'
 
 
-def get_hacker_news() -> list:
+def get_hacker_news() -> List:
     f = urllib.request.urlopen(HACKER_NEWS)
     soap = BeautifulSoup(f)
 
