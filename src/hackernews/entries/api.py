@@ -52,7 +52,7 @@ class EntryList(View):
             'id': entry.id,
             'title': entry.title,
             'url': entry.url,
-            'publish_date': entry.publish_date,
+            'created': entry.created.isoformat(),
         }
 
     def get(self, request):
