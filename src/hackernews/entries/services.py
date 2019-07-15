@@ -1,7 +1,10 @@
 import urllib.request
-from bs4 import BeautifulSoup
-from datetime import datetime
 from typing import List
+
+from bs4 import BeautifulSoup
+from django.db import IntegrityError
+
+from .models import Entry
 
 HACKER_NEWS = 'https://news.ycombinator.com/'
 
@@ -19,3 +22,10 @@ def get_hacker_news() -> List:
     })
     return hacker_news
 
+
+def add_entries() -> None:
+    for item in get_hacker_news():
+        try:
+            Entry.objects.create(**item)
+        except IntegrityError:
+            pass
